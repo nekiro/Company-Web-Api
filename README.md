@@ -21,7 +21,7 @@ Technologies:
 POST /company/create
 ```
 
-```json
+```
 {
     "Name": "<string>",
     "EstablishmentYear”: <integer>,
@@ -34,7 +34,7 @@ POST /company/create
 }
 ```
 Answer
-```json
+```
 {
     "Id”: <long>
 }
@@ -43,7 +43,7 @@ Answer
 ```
 POST /company/search
 ```
-```json
+```
 {
     "Keyword": "<string>",
     "EmployeeDateOfBirthFrom": "<DateTime?>",
@@ -52,7 +52,7 @@ POST /company/search
 }
 ```
 Answer
-```json
+```
 [{
         "Name": "<string>",
         "EstablishmentYear”: <integer>,
@@ -67,7 +67,7 @@ Answer
 ```
 PUT /company/update/<id>
 ```
-```json
+```
 {
     "Name": "<string>",
     "EstablishmentYear”: <integer>,
