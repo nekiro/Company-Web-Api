@@ -27,11 +27,11 @@ namespace PumoxTestApp.Controllers
         public async Task<IActionResult> CreateNewCompany([FromBody] JObject body)
         {
             CompanyInputDto companyDto = new CompanyInputDto();
-            Tuple<bool, string> result = await Task.Run(() => companyDto.ParseJsonData(body));
-            if (!result.Item1)
+            (bool Success, string Error) = await Task.Run(() => companyDto.ParseJsonData(body));
+            if (!Success)
             {
                 // deserialization failed
-                return BadRequest(result.Item2);
+                return BadRequest(Error);
             }
 
             ServiceResponse<object> response = await _companyService.CreateNewCompany(companyDto);
@@ -65,11 +65,11 @@ namespace PumoxTestApp.Controllers
         public async Task<IActionResult> UpdateCompany(long id, [FromBody] JObject body)
         {
             CompanyInputDto companyDto = new CompanyInputDto();
-            Tuple<bool, string> result = await Task.Run(() => companyDto.ParseJsonData(body));
-            if (!result.Item1)
+            (bool Success, string Error) = await Task.Run(() => companyDto.ParseJsonData(body));
+            if (!Success)
             {
                 // deserialization failed
-                return BadRequest(result.Item2);
+                return BadRequest(Error);
             }
 
             ServiceResponse<object> response = await _companyService.UpdateCompany(id, companyDto);

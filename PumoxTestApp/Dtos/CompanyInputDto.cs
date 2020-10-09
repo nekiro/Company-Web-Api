@@ -10,13 +10,13 @@ namespace PumoxTestApp.Dtos
         public int EstablishmentYear { get; set; }
         public List<NewEmployeeDto> Employees { get; set; } = new List<NewEmployeeDto>();
 
-        public Tuple<bool, string> ParseJsonData(JObject obj)
+        public (bool Success, string Error) ParseJsonData(JObject obj)
         {
             try
             {
                 if (!obj.ContainsKey("Name") || !obj.ContainsKey("EstablishmentYear"))
                 {
-                    return Tuple.Create(false, "Required property is missing. Required properties: Name:<string>, EstablishmentYear:<integer>");
+                    return (false, "Required property is missing. Required properties: Name:<string>, EstablishmentYear:<integer>");
                 }
 
                 Name = obj.Value<string>("Name");
@@ -36,17 +36,17 @@ namespace PumoxTestApp.Dtos
                     }
                 }
 
-                return Tuple.Create(true, "");
+                return (true, "");
             }
             catch (FormatException)
             {
                 //thrown when obj.Value<type> fails
-                return Tuple.Create(false, "Data type is invalid. Data types: Name:<string>, EstablishmentYear:<integer>");
+                return (false, "Data type is invalid. Data types: Name:<string>, EstablishmentYear:<integer>");
             }
             catch (InvalidCastException)
             {
                 //thrown when obj.Value<type> fails and the value is null
-                return Tuple.Create(false, "Data type is invalid. Data types: Name:<string>, EstablishmentYear:<integer>");
+                return (false, "Data type is invalid. Data types: Name:<string>, EstablishmentYear:<integer>");
             }
         }
     }
