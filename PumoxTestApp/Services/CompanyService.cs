@@ -4,6 +4,7 @@ using PumoxTestApp.Dtos;
 using PumoxTestApp.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -82,13 +83,14 @@ namespace PumoxTestApp.Services
 
             List<Company> companies = new List<Company>();
 
+            bool isKeywordValid = !string.IsNullOrEmpty(searchDto.Keyword);
+
             await _context.Companies.Include("Employees").ForEachAsync(contextCompany => {
-                if (!string.IsNullOrEmpty(searchDto.Keyword))
+                if (isKeywordValid && contextCompany.Name.IndexOf(searchDto.Keyword, StringComparison.CurrentCultureIgnoreCase) != -1 ||
+                    contextCompany.Employees.Any(employee => employee.FirstName.IndexOf(searchDto.Keyword, StringComparison.CurrentCultureIgnoreCase) != -1 ||
+                    employee.LastName.IndexOf(searchDto.Keyword, StringComparison.CurrentCultureIgnoreCase) != -1))
                 {
-                    if (contextCompany.Name.Contains(searchDto.Keyword))
-                    {
-                        companies.Add(contextCompany);
-                    }
+                    companies.Add(contextCompany);
                 }
                 else if (searchDto.EmployeeDateOfBirthFrom != null && searchDto.EmployeeDateOfBirthTo != null)
                 {
