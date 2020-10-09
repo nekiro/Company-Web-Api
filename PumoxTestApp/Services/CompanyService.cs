@@ -94,21 +94,17 @@ namespace PumoxTestApp.Services
                 }
                 else if (searchDto.EmployeeDateOfBirthFrom != null && searchDto.EmployeeDateOfBirthTo != null)
                 {
-                    if (contextCompany.Employees.Any(e => e.DateOfBirth >= searchDto.EmployeeDateOfBirthFrom &&
-                        e.DateOfBirth <= searchDto.EmployeeDateOfBirthTo))
+                    if (contextCompany.Employees.Any(employee => employee.DateOfBirth >= searchDto.EmployeeDateOfBirthFrom &&
+                        employee.DateOfBirth <= searchDto.EmployeeDateOfBirthTo))
                     {
                         companies.Add(contextCompany);
                     }
                 }
                 else
                 {
-                    foreach (var employee in contextCompany.Employees)
+                    if (contextCompany.Employees.Any(employee => searchDto.EmployeesJobTitles.Any(title => employee.JobTitle == title)))
                     {
-                        if (searchDto.EmployeesJobTitles.Any(title => employee.JobTitle == title))
-                        {
-                            companies.Add(contextCompany);
-                            break;
-                        }
+                        companies.Add(contextCompany);
                     }
                 }
             });
