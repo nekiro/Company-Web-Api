@@ -8,6 +8,6 @@ namespace PumoxTestApp.Models
         public string Name { get; set; }
         public int EstablishmentYear { get; set; }
 
-        public ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
     }
 }

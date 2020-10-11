@@ -51,7 +51,7 @@ namespace PumoxTestApp.Controllers
             SearchCompanyDto searchDto = new SearchCompanyDto();
             await Task.Run(() => searchDto.ParseJsonData(body));
 
-            ServiceResponse<List<Company>> response = await _companyService.SearchCompanies(searchDto);
+            ServiceResponse<ICollection<Company>> response = await _companyService.SearchCompanies(searchDto);
             if (!response.Success)
             {
                 return BadRequest(response.Message);

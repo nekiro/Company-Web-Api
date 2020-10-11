@@ -77,11 +77,11 @@ namespace PumoxTestApp.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<Company>>> SearchCompanies(SearchCompanyDto searchDto)
+        public async Task<ServiceResponse<ICollection<Company>>> SearchCompanies(SearchCompanyDto searchDto)
         {
-            ServiceResponse<List<Company>> serviceResponse = new ServiceResponse<List<Company>>();
+            ServiceResponse<ICollection<Company>> serviceResponse = new ServiceResponse<ICollection<Company>>();
 
-            List<Company> companies = new List<Company>();
+            ICollection<Company> companies = new List<Company>();
 
             bool isKeywordValid = !string.IsNullOrEmpty(searchDto.Keyword);
 

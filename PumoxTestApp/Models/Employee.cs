@@ -17,6 +17,7 @@ namespace PumoxTestApp.Models
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public JobTitle JobTitle { get; set; }
+
         public Company Company { get; set; }
     }
 }
