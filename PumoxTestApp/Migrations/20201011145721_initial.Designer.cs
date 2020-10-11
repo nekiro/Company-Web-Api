@@ -10,8 +10,8 @@ using PumoxTestApp.Models;
 namespace PumoxTestApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201006151813_init")]
-    partial class init
+    [Migration("20201011145721_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
