@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using PumoxTestApp.Models;
+﻿using PumoxTestApp.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace PumoxTestApp.Dtos
 {

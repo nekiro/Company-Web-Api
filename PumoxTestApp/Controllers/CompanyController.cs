@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using PumoxTestApp.Dtos;
 using PumoxTestApp.Models;
 using PumoxTestApp.Services;
+using System.Threading.Tasks;
 
 namespace PumoxTestApp.Controllers
 {

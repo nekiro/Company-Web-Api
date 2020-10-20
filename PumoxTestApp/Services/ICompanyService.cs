@@ -1,6 +1,5 @@
 ﻿using PumoxTestApp.Dtos;
 using PumoxTestApp.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PumoxTestApp.Services
