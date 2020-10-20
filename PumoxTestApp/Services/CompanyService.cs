@@ -27,19 +27,22 @@ namespace PumoxTestApp.Services
                 EntityEntry<Company> newCompany = await _context.Companies.AddAsync(new Company
                 {
                     Name = companyDto.Name,
-                    EstablishmentYear = companyDto.EstablishmentYear
+                    EstablishmentYear = companyDto.EstablishmentYear.Value
                 });
 
-                foreach (var dtoEmployee in companyDto.Employees)
+                if (companyDto.Employees != null)
                 {
-                    _context.Employees.Add(new Employee
+                    foreach (var dtoEmployee in companyDto.Employees)
                     {
-                        FirstName = dtoEmployee.FirstName,
-                        LastName = dtoEmployee.LastName,
-                        DateOfBirth = dtoEmployee.DateOfBirth,
-                        JobTitle = dtoEmployee.JobTitle,
-                        Company = newCompany.Entity
-                    });
+                        _context.Employees.Add(new Employee
+                        {
+                            FirstName = dtoEmployee.FirstName,
+                            LastName = dtoEmployee.LastName,
+                            DateOfBirth = dtoEmployee.DateOfBirth.Value,
+                            JobTitle = dtoEmployee.JobTitle.Value,
+                            Company = newCompany.Entity
+                        });
+                    }
                 }
 
                 await _context.SaveChangesAsync();
@@ -66,50 +69,37 @@ namespace PumoxTestApp.Services
                 return serviceResponse;
             }
 
-            await _context.Employees.ForEachAsync(employee =>
-            {
-                if (employee.Company == company)
-                    _context.Employees.Remove(employee);
-            });
-
             _context.Companies.Remove(company);
             await _context.SaveChangesAsync();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<ICollection<Company>>> SearchCompanies(SearchCompanyDto searchDto)
+        public async Task<ServiceResponse<object>> SearchCompanies(SearchCompanyDto searchDto)
         {
-            ServiceResponse<ICollection<Company>> serviceResponse = new ServiceResponse<ICollection<Company>>();
+            ServiceResponse<object> serviceResponse = new ServiceResponse<object>();
 
-            ICollection<Company> companies = new List<Company>();
+            List<Company> filteredCompanies = null;
 
             bool isKeywordValid = !string.IsNullOrEmpty(searchDto.Keyword);
 
-            await _context.Companies.Include("Employees").ForEachAsync(contextCompany => {
-                if (isKeywordValid && contextCompany.Name.IndexOf(searchDto.Keyword, StringComparison.CurrentCultureIgnoreCase) != -1 ||
-                    contextCompany.Employees.Any(employee => employee.FirstName.IndexOf(searchDto.Keyword, StringComparison.CurrentCultureIgnoreCase) != -1 ||
-                    employee.LastName.IndexOf(searchDto.Keyword, StringComparison.CurrentCultureIgnoreCase) != -1))
-                {
-                    companies.Add(contextCompany);
-                }
-                else if (searchDto.EmployeeDateOfBirthFrom != null && searchDto.EmployeeDateOfBirthTo != null)
-                {
-                    if (contextCompany.Employees.Any(employee => employee.DateOfBirth >= searchDto.EmployeeDateOfBirthFrom &&
-                        employee.DateOfBirth <= searchDto.EmployeeDateOfBirthTo))
-                    {
-                        companies.Add(contextCompany);
-                    }
-                }
-                else
-                {
-                    if (contextCompany.Employees.Any(employee => searchDto.EmployeesJobTitles.Any(title => employee.JobTitle == title)))
-                    {
-                        companies.Add(contextCompany);
-                    }
-                }
-            });
+            if (!isKeywordValid && searchDto.EmployeeDateOfBirthFrom == null && searchDto.EmployeeDateOfBirthTo == null && searchDto.EmployeesJobTitles == null)
+            {
+                filteredCompanies = new List<Company>();
+            }
+            else
+            {
+                filteredCompanies = await (from company in _context.Set<Company>()
+                            join employee in _context.Set<Employee>()
+                            on company equals employee.Company
+                            where EF.Functions.Like(company.Name, searchDto.Keyword) ||
+                            EF.Functions.Like(employee.FirstName, searchDto.Keyword) ||
+                            EF.Functions.Like(employee.LastName, searchDto.Keyword) ||
+                            searchDto.EmployeeDateOfBirthFrom != null && searchDto.EmployeeDateOfBirthTo != null && employee.DateOfBirth >= searchDto.EmployeeDateOfBirthFrom && employee.DateOfBirth <= searchDto.EmployeeDateOfBirthTo ||
+                            searchDto.EmployeesJobTitles != null && searchDto.EmployeesJobTitles.Contains(employee.JobTitle)
+                            select company).ToListAsync();
+            }
 
-            serviceResponse.Data = companies;
+            serviceResponse.Data = new { Results = filteredCompanies };
             return serviceResponse;
         }
 
@@ -118,7 +108,7 @@ namespace PumoxTestApp.Services
             ServiceResponse<object> serviceResponse = new ServiceResponse<object>();
             try
             {
-                Company company = _context.Companies.Where(c => c.CompanyID == id).First();
+                Company company = _context.Companies.Where(c => c.CompanyID == id).FirstOrDefault();
                 if (company == null)
                 {
                     serviceResponse.Success = false;
@@ -127,32 +117,32 @@ namespace PumoxTestApp.Services
                 }
 
                 company.Name = companyDto.Name;
-                company.EstablishmentYear = companyDto.EstablishmentYear;
+                company.EstablishmentYear = companyDto.EstablishmentYear.Value;
 
-                await _context.Employees.ForEachAsync(employee =>
-                {
-                    if (employee.Company == company)
-                        _context.Employees.Remove(employee);
-                });
+                _context.Employees.RemoveRange(_context.Employees.Where(e => e.Company == company));
 
-                foreach (var dtoEmployee in companyDto.Employees)
-                {
-                    await _context.Employees.AddAsync(new Employee
+                _context.Employees.AddRange(
+                    (from employee in companyDto.Employees
+                    select new Employee()
                     {
-                        FirstName = dtoEmployee.FirstName,
-                        LastName = dtoEmployee.LastName,
-                        DateOfBirth = dtoEmployee.DateOfBirth,
-                        JobTitle = dtoEmployee.JobTitle,
-                        Company = company
-                    });
-                }
+                        FirstName = employee.FirstName,
+                        LastName = employee.LastName,
+                        DateOfBirth = employee.DateOfBirth.Value,
+                        JobTitle = employee.JobTitle.Value,
+                        Company = company,
+                    }).ToList()
+                 );
 
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 serviceResponse.Success = false;
-                serviceResponse.Message = $"Exception: {ex.Message}, InnerException: {ex.InnerException.Message}";
+                serviceResponse.Message = $"Exception: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    serviceResponse.Message += $" InnerException: {ex.InnerException.Message}";
+                }
             }
 
             return serviceResponse;

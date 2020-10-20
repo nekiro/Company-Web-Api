@@ -24,14 +24,11 @@ namespace PumoxTestApp.Controllers
         [HttpPost()]
         [Route("create")]
         [Authorize]
-        public async Task<IActionResult> CreateNewCompany([FromBody] JObject body)
+        public async Task<IActionResult> CreateNewCompany(CompanyInputDto companyDto)
         {
-            CompanyInputDto companyDto = new CompanyInputDto();
-            (bool Success, string Error) = await Task.Run(() => companyDto.ParseJsonData(body));
-            if (!Success)
+            if (!ModelState.IsValid)
             {
-                // deserialization failed
-                return BadRequest(Error);
+                return BadRequest(ModelState);
             }
 
             ServiceResponse<object> response = await _companyService.CreateNewCompany(companyDto);
@@ -46,12 +43,14 @@ namespace PumoxTestApp.Controllers
         [HttpPost()]
         [Route("search")]
         [Authorize]
-        public async Task<IActionResult> SearchCompany([FromBody] JObject body)
+        public async Task<IActionResult> SearchCompany(SearchCompanyDto searchDto)
         {
-            SearchCompanyDto searchDto = new SearchCompanyDto();
-            await Task.Run(() => searchDto.ParseJsonData(body));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            ServiceResponse<ICollection<Company>> response = await _companyService.SearchCompanies(searchDto);
+            ServiceResponse<object> response = await _companyService.SearchCompanies(searchDto);
             if (!response.Success)
             {
                 return BadRequest(response.Message);
@@ -62,17 +61,14 @@ namespace PumoxTestApp.Controllers
 
         [HttpPut]
         [Route("update/{id}")]
-        public async Task<IActionResult> UpdateCompany(long id, [FromBody] JObject body)
+        public async Task<IActionResult> UpdateCompany(long id, CompanyInputDto companyInputDto)
         {
-            CompanyInputDto companyDto = new CompanyInputDto();
-            (bool Success, string Error) = await Task.Run(() => companyDto.ParseJsonData(body));
-            if (!Success)
+            if (!ModelState.IsValid)
             {
-                // deserialization failed
-                return BadRequest(Error);
+                return BadRequest(ModelState);
             }
 
-            ServiceResponse<object> response = await _companyService.UpdateCompany(id, companyDto);
+            ServiceResponse<object> response = await _companyService.UpdateCompany(id, companyInputDto);
             if (!response.Success)
             {
                 return BadRequest(response.Message);
