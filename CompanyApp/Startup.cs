@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PumoxTestApp.Models;
-using PumoxTestApp.Services;
+using CompanyApp.Models;
+using CompanyApp.Services;
 
-namespace PumoxTestApp
+namespace CompanyApp
 {
     public class Startup
     {

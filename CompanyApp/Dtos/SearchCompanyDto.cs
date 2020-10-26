@@ -1,8 +1,8 @@
-﻿using PumoxTestApp.Models;
+﻿using CompanyApp.Models;
 using System;
 using System.Collections.Generic;
 
-namespace PumoxTestApp.Dtos
+namespace CompanyApp.Dtos
 {
     public class SearchCompanyDto
     {

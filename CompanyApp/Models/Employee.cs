@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PumoxTestApp.Models
+namespace CompanyApp.Models
 {
     public enum JobTitle
     {

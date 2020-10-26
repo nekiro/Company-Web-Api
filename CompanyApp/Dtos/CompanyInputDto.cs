@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace PumoxTestApp.Dtos
+namespace CompanyApp.Dtos
 {
     public class CompanyInputDto
     {

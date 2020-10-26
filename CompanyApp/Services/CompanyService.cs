@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using PumoxTestApp.Dtos;
-using PumoxTestApp.Models;
+using CompanyApp.Dtos;
+using CompanyApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PumoxTestApp.Services
+namespace CompanyApp.Services
 {
     public class CompanyService : ICompanyService
     {

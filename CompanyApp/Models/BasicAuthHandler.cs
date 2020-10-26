@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace PumoxTestApp.Models
+namespace CompanyApp.Models
 {
     public class BasicAuthOptions : AuthenticationSchemeOptions
     {

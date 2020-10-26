@@ -1,4 +1,4 @@
-﻿namespace PumoxTestApp.Models
+﻿namespace CompanyApp.Models
 {
     public class ServiceResponse<T>
     {

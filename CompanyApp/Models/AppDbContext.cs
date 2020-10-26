@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace PumoxTestApp.Models
+namespace CompanyApp.Models
 {
     public class AppDbContext : DbContext
     {

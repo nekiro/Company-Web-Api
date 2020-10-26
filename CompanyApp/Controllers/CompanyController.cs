@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PumoxTestApp.Dtos;
-using PumoxTestApp.Models;
-using PumoxTestApp.Services;
+using CompanyApp.Dtos;
+using CompanyApp.Models;
+using CompanyApp.Services;
 using System.Threading.Tasks;
 
-namespace PumoxTestApp.Controllers
+namespace CompanyApp.Controllers
 {
     [ApiController]
     [Route("company")]

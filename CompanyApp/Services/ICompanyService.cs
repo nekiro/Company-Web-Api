@@ -1,8 +1,8 @@
-﻿using PumoxTestApp.Dtos;
-using PumoxTestApp.Models;
+﻿using CompanyApp.Dtos;
+using CompanyApp.Models;
 using System.Threading.Tasks;
 
-namespace PumoxTestApp.Services
+namespace CompanyApp.Services
 {
     public interface ICompanyService
     {
