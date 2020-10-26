@@ -6,7 +6,6 @@ Authentication header is following:
 ```
 Basic <encodedBase64 admin:admin>
 ```
-It was written as a test task for a job application.
 
 Technologies:
   - .Net Core 3.1
@@ -83,8 +82,3 @@ PUT /company/update/<id>
 ```
 PUT /company/delete/<id>
 ```
-
-License
-----
-
-MIT
