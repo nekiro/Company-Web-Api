@@ -7,6 +7,8 @@ Authentication header is following:
 Basic <encodedBase64 admin:admin>
 ```
 
+This was originally written for a job interview, but they said I'm not good enough :(
+
 Technologies:
   - .Net Core 3.1
   - Restful Api
